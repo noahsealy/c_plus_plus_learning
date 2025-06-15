@@ -1,1 +1,1 @@
-# c_plus_plus_learning
+# Hi, this is my C++ learning repository.
