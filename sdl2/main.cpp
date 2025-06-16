@@ -2,7 +2,12 @@
 #include <SDL_ttf.h>
 #include <iostream>
 
+using namespace std;
+
 int main(int argc, char* argv[]) {
+
+    string status = "start";
+
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
 
@@ -27,8 +32,25 @@ int main(int argc, char* argv[]) {
 
     while (running) {
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT)
+            if (event.type == SDL_QUIT) {
+                cout << "Quitting..." << endl;
                 running = false;
+            }
+            if (event.type == SDL_KEYDOWN) {
+                cout << "Key pressed: " << event.key.keysym.sym << endl;
+                if (event.key.keysym.sym == SDLK_w) {
+                    cout << "W pressed" << endl;
+                    status = "w was pressed";
+                    cout << "Status: " << status << endl;
+                    SDL_Color color = {255, 255, 255, 255};  // White text
+                    SDL_Surface* surface = TTF_RenderText_Solid(font, "w was pressed", color);
+                    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+                    SDL_Rect dstRect = {100, 100, surface->w, surface->h};
+                    SDL_FreeSurface(surface);
+
+                }
+            }
         }
 
         SDL_RenderClear(renderer);
