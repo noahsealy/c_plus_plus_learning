@@ -11,21 +11,33 @@ int main(int argc, char* argv[]) {
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
 
-    SDL_Window* window = SDL_CreateWindow("SDL2 Text Example", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Window* window;
+    SDL_Renderer* renderer;
 
-    TTF_Font* font = TTF_OpenFont("/System/Library/Fonts/Supplemental/Arial.ttf", 24); // Or any other TTF path
-    if (!font) {
-        std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
-        return 1;
+    int result = SDL_CreateWindowAndRenderer( 640, 480, NULL, &window, &renderer );
+    
+    if ( result != 0 ) {
+        cout << "Failed to create window and renderer: " << SDL_GetError() << endl;
     }
 
-    SDL_Color color = {255, 255, 255, 255};  // White text
-    SDL_Surface* surface = TTF_RenderText_Solid(font, "Hello, SDL2!", color);
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    // TTF_Font* font = TTF_OpenFont("/System/Library/Fonts/Supplemental/Arial.ttf", 24); // Or any other TTF path
+    // if (!font) {
+    //     std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
+    //     return 1;
+    // }
 
-    SDL_Rect dstRect = {100, 100, surface->w, surface->h};
-    SDL_FreeSurface(surface);
+    // SDL_Color color = {255, 255, 255, 255};  // White text
+    // SDL_Surface* surface = TTF_RenderText_Solid(font, "Hello, SDL2!", color);
+    // SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+    // SDL_Rect dstRect = {100, 100, surface->w, surface->h};
+    // SDL_FreeSurface(surface);
+
+    SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
+    SDL_RenderDrawPoint( renderer, 100, 100 );
+
+    // Update window
+    SDL_RenderPresent( renderer );
 
     bool running = true;
     SDL_Event event;
@@ -42,24 +54,23 @@ int main(int argc, char* argv[]) {
                     cout << "W pressed" << endl;
                     status = "w was pressed";
                     cout << "Status: " << status << endl;
-                    SDL_Color color = {255, 255, 255, 255};  // White text
-                    SDL_Surface* surface = TTF_RenderText_Solid(font, "w was pressed", color);
-                    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+                    SDL_SetRenderDrawColor( renderer, 255, 255, 0, 255 );
+                    SDL_RenderDrawPoint( renderer, 100, 100 );
 
-                    SDL_Rect dstRect = {100, 100, surface->w, surface->h};
-                    SDL_FreeSurface(surface);
+                    // Update window
+                    SDL_RenderPresent( renderer );
 
                 }
             }
         }
 
-        SDL_RenderClear(renderer);
-        SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
-        SDL_RenderPresent(renderer);
+        // SDL_RenderClear(renderer);
+        // SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
+        // SDL_RenderPresent(renderer);
     }
 
-    SDL_DestroyTexture(texture);
-    TTF_CloseFont(font);
+    // SDL_DestroyTexture(texture);
+    // TTF_CloseFont(font);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     TTF_Quit();
